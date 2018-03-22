@@ -71,10 +71,13 @@ private:
                             rgb_frame.cols,rgb_frame.rows,
                             QImage::Format_RGB888);
                 if(wgt){
+                    img1.bits();
                     wgt->set_image(img1);
                     wgt->update();
                     frame_rate++;
                 }
+
+      //          this->usleep(10);
             }else{
                 this->usleep(10);
             }

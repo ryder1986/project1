@@ -21,6 +21,7 @@ public:
         QTimer *t=new QTimer();
         connect(t,SIGNAL(timeout()),this,SLOT(check_rate()));
         t->start(1000);
+
     }
 
 
@@ -40,13 +41,18 @@ protected:
             lock.lock();
             frame_rate++;
             QPainter painter(this);
+            if(!img.isNull()){
+           //     prt(info,"%d %d",img.byteCount(),img.bytesPerLine());
+                painter.drawImage(QRect(0,0,this->width(),this->height()),img);
+            }
 
-            painter.drawImage(QRect(0,0,this->width(),this->height()),img);
-
+#if 0
             QBrush blue_brush_trans(QColor(0,222,200,255));
             painter.setBrush(blue_brush_trans);
+
             //   painter.drawRect(0,0,this->width(),this->height());
             painter.drawRect(100,100,300,300);
+#endif
             lock.unlock();
         }
     }
