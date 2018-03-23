@@ -43,10 +43,15 @@ public:
         delete wgt;
         delete src;
     }
-    QWidget **get_widget()
+    void set_widget(PlayerWidget *w)
     {
-        return (   QWidget **)&wgt;
+      wgt=w;
     }
+    PlayerWidget *get_widget()
+    {
+        return wgt;
+    }
+
 public slots:
     void check_rate()
     {

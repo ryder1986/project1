@@ -138,4 +138,56 @@ private :
     QStringList ip_list;
 };
 
+class ProcessedDataReciver: public QObject{
+    Q_OBJECT
+public:
+    ProcessedDataReciver()
+    {
+        udp_skt_alg_output=new QUdpSocket(this);
+        udp_skt_alg_output->bind(Protocol::SERVER_DATA_OUTPUT_PORT,QUdpSocket::ShareAddress);
+        connect(udp_skt_alg_output,SIGNAL(readyRead()),this,SLOT(get_rst()),Qt::QueuedConnection);
+    }
+signals:
+    void send_rst(QByteArray);
+public slots:
+    void get_rst()
+    {
+        QByteArray datagram_rst;
+        if(udp_skt_alg_output->hasPendingDatagrams())
+        {
+            //   int size=udp_skt_alg_output->pendingDatagramSize();
+            datagram_rst.resize((udp_skt_alg_output->pendingDatagramSize()));
+            udp_skt_alg_output->readDatagram(datagram_rst.data(),datagram_rst.size());
+            //        udp_skt_alg_output->readDatagram(sss,500);
+            //          datagram_rst= udp_skt_alg_output->readAll();
+#if 0
+            QList <QByteArray > bl= datagram_rst.split(':');
+            QByteArray b_index=bl[0];
+            int index=*(b_index);
+
+            prt(info,"get cam   %d rst",index);
+
+            QByteArray b_loc=bl[1];
+#else
+
+            prt(debug,"get data %s",datagram_rst.data());
+            emit send_rst(datagram_rst);
+#endif
+
+            //   emit send_camera_rst(index,b_loc);
+            //    QList <QByteArray > xy= b_loc.split(',');
+            //            int x=xy[0].toInt();
+            //            int y=xy[1].toInt();
+            //           prt(info," %d : %d",x,y);
+
+        }
+    }
+
+private:
+    QUdpSocket *udp_skt_alg_output;
+    QByteArray rst;
+};
+
+
+
 #endif // SERVERINFOSEARCHER_H

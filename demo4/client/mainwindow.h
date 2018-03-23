@@ -93,19 +93,19 @@ private slots:
 
     void try_add_picture(Player *p)
     {
-        QWidget **w=p->get_widget();
-        PlayerWidget *pp=new PlayerWidget();
-        *w=pp;
-        ui->groupBox_picture->layout()->addWidget(pp);
-        connect(pp,SIGNAL(selected(PlayerWidget*)),this,SLOT(picture_selected(PlayerWidget*)));
+
+        PlayerWidget *pw=new PlayerWidget();
+        ui->groupBox_picture->layout()->addWidget(pw);
+        connect(pw,SIGNAL(selected(PlayerWidget*)),this,SLOT(picture_selected(PlayerWidget*)));
+        p->set_widget(pw);
         //    update_pic();
     }
     void picture_selected(PlayerWidget *wgt)
     {
         flag1++;
         foreach (Player *p, players) {
-            QWidget **w=p->get_widget();
-            PlayerWidget *pp= (PlayerWidget*)*w;
+
+            PlayerWidget *pp= (PlayerWidget*)p->get_widget();
             if(pp==wgt){
                 prt(info," select");
 
@@ -206,7 +206,7 @@ public slots:
 private:
     MainWindow *mw;
 
-
+    ProcessedDataReciver data_rcv;
 };
 
 #endif // MAINWINDOW_H
