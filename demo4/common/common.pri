@@ -1,8 +1,10 @@
+
+QT+=network
 message($$PWD)
 INCLUDEPATH+=$$PWD
-HEADERS+=$$PWD/tool.h $$PWD/videosource.h $$PWD/pd.h
+HEADERS+=$$PWD/tool.h $$PWD/videosource.h $$PWD/pd.h $$PWD/filedatabase.h
 
-SOURCES+=$$PWD/tool.cpp $$PWD/videosource.cpp $$PWD/pd.cpp
+SOURCES+=$$PWD/tool.cpp $$PWD/videosource.cpp $$PWD/pd.cpp  $$PWD/filedatabase.cpp
 CONFIG+=c++11
 win32{
 OPENCV_PATH=E:\repo-github\libs\third-party\opencv\opencv-vs2013-x86

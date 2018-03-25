@@ -15,9 +15,28 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    videoprocessor.cpp \
+    server.cpp \
+    processeddatasender.cpp \
+    packagemanager.cpp \
+    fvdvideoprocessor.cpp \
+    clientsession.cpp \
+    cameramanager.cpp \
+    camera.cpp
 
 install_files.files+=config.json  hogcascade_pedestrians.xml
 install_files.path=$$OUT_PWD/
 INSTALLS +=install_files
 
+include(../common/common.pri)
+
+HEADERS += \
+    videoprocessor.h \
+    server.h \
+    processeddatasender.h \
+    packagemanager.h \
+    fvdvideoprocessor.h \
+    clientsession.h \
+    cameramanager.h \
+    camera.h
