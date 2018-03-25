@@ -97,27 +97,41 @@ private slots:
         PlayerWidget *pw=new PlayerWidget();
         ui->groupBox_picture->layout()->addWidget(pw);
         connect(pw,SIGNAL(selected(PlayerWidget*)),this,SLOT(picture_selected(PlayerWidget*)));
+
         p->set_widget(pw);
         //    update_pic();
     }
     void picture_selected(PlayerWidget *wgt)
     {
         flag1++;
+        bool select=false;
+        if(flag1%2)
+            select=true;
+        else
+            select=false;
         foreach (Player *p, players) {
 
             PlayerWidget *pp= (PlayerWidget*)p->get_widget();
+
+
             if(pp==wgt){
                 prt(info," select");
-
+                if(select){
+                    connect(&data_rcv,SIGNAL(send_rst(QByteArray)),pp,SLOT(set_layout_data(QByteArray)));
+                    clt.focus_camera(players.indexOf(p)+1);
+                }else{
+                    clt.disfocus_camera(players.indexOf(p)+1);
+                    disconnect(&data_rcv,SIGNAL(send_rst(QByteArray)),pp,SLOT(set_layout_data(QByteArray)));
+                }
                 pp->show();
             }else{
-                prt(info,"not select");
-                if(flag1%2)
+
+                //  prt(info,"not select");
+                if(select)
                 {
                     pp->hide();
                 }else{
-
-                      pp->show();
+                    pp->show();
                 }
             }
         }
@@ -186,7 +200,8 @@ private:
     // Tmp *player_starter;
     QThread starter_thread;
     PlayThread *pt;
-      int flag1;
+    int flag1;
+    ProcessedDataReciver data_rcv;
 };
 
 class PlayThread:public QObject{
@@ -206,7 +221,7 @@ public slots:
 private:
     MainWindow *mw;
 
-    ProcessedDataReciver data_rcv;
+
 };
 
 #endif // MAINWINDOW_H
