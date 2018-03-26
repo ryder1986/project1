@@ -5,6 +5,7 @@
 #include <QOpenGLWidget>
 #include <QPainter>
 #include <QTimer>
+#include <QThread>
 #include <QMutex>
 #include <QMouseEvent>
 #include "tool.h"
@@ -14,28 +15,38 @@ public:
     {
         data.clear();
         p=pain;
-    //    p=new QPainter(par);
+        //    p=new QPainter(par);
     }
 
     ~LayoutPainter()
     {
-   //     delete p;
+        //     delete p;
     }
 
     void paint(QPainter *test)
     {
 
 
-   //       bool active=test->isActive();
+        //       bool active=test->isActive();
         if(!data.isEmpty()){
             QString str(data.toStdString().data());
-//            prt(info,"-->%s",str.toStdString().data());
+            prt(info,"-->%s",str.toStdString().data());
 
 
-    //        QString str(rst.data());
+            //        QString str(rst.data());
             QStringList list=str.split(":");
             QStringList l;
 
+#if 0
+            QBrush blue_brush_trans(QColor(111,111,111,111));
+            // blue_brush_trans.setStyle(Qt::BrushStyle);
+            test->setBrush(blue_brush_trans);
+#else
+            QBrush brush1(QColor(255,0,0,111));
+            QPen pen(brush1,10);
+            test->setPen(pen);
+
+#endif
             int w=test->window().width();
             int h=test->window().height();
             int wi=640;
@@ -47,11 +58,9 @@ public:
                 if(l.size()==4){
                     r.setRect(l[0].toInt()*w/wi*2,l[1].toInt()*h/he*2,l[2].toInt()*w/wi*2,
                             l[3].toInt()*h/he*2);
-                   // rcts.append(r);
-         //           test->isActive();
-
-               test->drawRect(r);
-
+                    // rcts.append(r);
+                    //           test->isActive();
+                    test->drawRect(r);
                 }
             }
 
@@ -83,7 +92,7 @@ public:
 
 
         QBrush blue_brush_trans(QColor(0,222,200,255));
-       // blue_brush_trans.setStyle(Qt::BrushStyle);
+        // blue_brush_trans.setStyle(Qt::BrushStyle);
         painter.setBrush(blue_brush_trans);
 
         QPen p(blue_brush_trans,200);
@@ -114,30 +123,32 @@ protected:
     void paintEvent(QPaintEvent *)
     {
         // if(img1.width()>0){
-        if(1){
-            lock.lock();
-            frame_rate++;
+         if(1){
+//            QThread::msleep(10);
+             lock.lock();
+                // QThread::msleep(2000);
+//            frame_rate++;
             QPainter painter(this);
             if(!img.isNull()){
                 //     prt(info,"%d %d",img.byteCount(),img.bytesPerLine());
                 painter.drawImage(QRect(0,0,this->width(),this->height()),img);
-          //      bool active=painter.isActive();
-                 pt->paint(&painter);
+                //      bool active=painter.isActive();
+                pt->paint(&painter);
 
 
             }
 
-            painter.drawText(QPointF(111,111),title);
+//            painter.drawText(QPointF(111,111),title);
 
-#if 0
-            QBrush blue_brush_trans(QColor(0,222,200,255));
-            painter.setBrush(blue_brush_trans);
+//#if 0
+//            QBrush blue_brush_trans(QColor(0,222,200,255));
+//            painter.setBrush(blue_brush_trans);
 
-            //   painter.drawRect(0,0,this->width(),this->height());
-            painter.drawRect(100,100,300,300);
-#endif
-            lock.unlock();
-        }
+//            //   painter.drawRect(0,0,this->width(),this->height());
+//            painter.drawRect(100,100,300,300);
+//#endif
+             lock.unlock();
+         }
     }
     void  initializeGL()
     {
@@ -147,9 +158,9 @@ protected:
 public slots:
     void set_layout_data(QByteArray data)
     {
-        lock.lock();
+    //    lock.lock();
         pt->set_data(data);
-        lock.unlock();
+    //    lock.unlock();
     }
 
     void check_rate()

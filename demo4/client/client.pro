@@ -13,11 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp client.cpp ServerInfoSearcher.cpp \
+        mainwindow.cpp client.cpp serverinfosearcher.cpp \
     player.cpp \
     playerwidget.cpp
 
-HEADERS  += mainwindow.h client.h ServerInfoSearcher.h \
+HEADERS  += mainwindow.h client.h serverinfosearcher.h \
     player.h \
     playerwidget.h
 

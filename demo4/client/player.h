@@ -79,6 +79,7 @@ private:
                     img1.bits();
                     wgt->set_image(img1);
                     wgt->set_title(cam_cfg.url);
+                    if(frame_rate%3==0)
                     wgt->update();
                     frame_rate++;
                 }
