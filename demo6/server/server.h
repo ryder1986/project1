@@ -195,7 +195,11 @@ public slots:
 
         QJsonObject pkg;
         pkg["type"]=type;
-
+        if(!type){
+            QJsonDocument doc_ret(pkg);
+            ret=doc_ret.toJson();//tell client to update
+            return 1;
+        }
         bool config_changed=false;
         switch(type){
         case Protocol::GET_CONFIG:// if client wants get config, client is ok
@@ -255,6 +259,12 @@ public slots:
         {
 
             int idx=obj["cam_index"].toInt();
+            if(idx>camera_manager->cameras.size()||idx<1){
+                prt(info,"%d out of range ",idx);
+                pkg["type"]=Protocol::NEED_UPDATE;
+                break;
+            }
+
             if(idx<=camera_manager->cameras.size()&&idx>0)
                 camera_manager->cameras[idx-1]->add_watcher(cs->ip());
             //    connect(camera_manager->cameras[idx-1],SIGNAL(output(QByteArray)),s,SLOT(handle_alg_out(QByteArray)));
@@ -263,7 +273,14 @@ public slots:
         }
         case Protocol::CAM_OUTPUT_CLOSE:
         {
-            int idx=obj["cam_index"].toInt();
+              int idx=obj["cam_index"].toInt();
+              if(idx>camera_manager->cameras.size()||idx<1){
+                  prt(info,"%d out of range ",idx);
+                  pkg["type"]=Protocol::NEED_UPDATE;
+                  break;
+              }
+
+
             if(idx<=camera_manager->cameras.size())
                 camera_manager->cameras[idx-1]->del_watcher(cs->ip());
             //  disconnect(camera_manager->cameras[idx-1],SIGNAL(output(QByteArray)),s,SLOT(handle_alg_out(QByteArray)));
@@ -273,6 +290,14 @@ public slots:
         case Protocol::MOD_CAMERA_ALG:
         {
             int idx=obj["cam_index"].toInt();
+
+            if(idx>camera_manager->cameras.size()||idx<1){
+                prt(info,"%d out of range ",idx);
+                pkg["type"]=Protocol::NEED_UPDATE;
+                break;
+            }
+
+
             // QJsonObject alg=obj["alg"].toObject();
             camera_manager->modify_camera(idx,obj["alg"],CameraManager::MODIFY_ALG);
             QJsonValue jv= camera_manager->config();
@@ -297,16 +322,34 @@ public slots:
         case Protocol::MOD_CAMERA_ATTR:
         {
             int idx=obj["cam_index"].toInt();
-            camera_manager->modify_camera(idx,obj["url"],CameraManager::MODIFY_URL);
-            QJsonValue jv= camera_manager->config();
-            cfg.cams_cfg=jv;
-            //  jv_2_cfg(jv);
-            save_cfg();
+            //    camera_manager->modify_camera(idx,obj["url"],CameraManager::MODIFY_URL);
+            if(idx>camera_manager->cameras.size()||idx<1){
+                prt(info,"%d out of range ",idx);
+                pkg["type"]=Protocol::NEED_UPDATE;
+                break;
+            }
+
+
+            if(idx<=camera_manager->cameras.size()&&idx>0){
+                camera_manager->modify_attr(idx,obj["camera_args"]);
+                QJsonValue jv= camera_manager->config();
+                cfg.cams_cfg=jv;
+                //  jv_2_cfg(jv);
+                save_cfg();
+            }
+
             break;
         }
         case Protocol::INSERT_CAMERA:
         {
             int idx=obj["cam_index"].toInt();
+            if(idx>camera_manager->cameras.size()||idx<1){
+                prt(info,"%d out of range ",idx);
+                pkg["type"]=Protocol::NEED_UPDATE;
+                break;
+            }
+
+
             QJsonValue v=obj["camera"];
             camera_manager->insert_camera(idx,v);
             QJsonValue jv= camera_manager->config();
@@ -319,6 +362,13 @@ public slots:
         case Protocol::DELETE_CAMERA:
         {
             int idx=obj["cam_index"].toInt();
+            if(idx>camera_manager->cameras.size()||idx<1){
+                prt(info,"%d out of range ",idx);
+                pkg["type"]=Protocol::NEED_UPDATE;
+                break;
+            }
+
+
             camera_manager->delete_camera(idx);
             QJsonValue jv=camera_manager->config();
             cfg.cams_cfg=jv;
@@ -342,11 +392,11 @@ public slots:
 
             break;
         }
-            //        case Protocol::NEED_UPDATE:
-            //        {
+            //            case Protocol::NEED_UPDATE:
+            //            {
 
-            //            break;
-            //        }
+            //                break;
+            //            }
 
         default:break;
         }

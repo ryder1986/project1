@@ -182,8 +182,8 @@ public slots:
         while(get_valid_buf(tmp_msg,valid_buf)) {
             QByteArray rt;
             rt.clear();
-              QString str1(valid_buf);
-          qDebug()<<"vaild msg--------------->"<<str1;
+            QString str1(valid_buf);
+            qDebug()<<"vaild msg--------------->"<<str1;
             emit client_request(valid_buf,rt,this);
             writes_num=skt->write(rt.data(),rt.size());
             prt(info,"server reply %d bytes",writes_num);

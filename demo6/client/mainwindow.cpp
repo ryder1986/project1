@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox->clear();
     ui->comboBox->setEnabled(false);
     connect(this,SIGNAL(add_picture(Player *)),this,SLOT(try_add_picture(Player *)));
+
 }
 
 MainWindow::~MainWindow()
@@ -83,4 +84,20 @@ void MainWindow::on_pushButton_save_clicked()
     QByteArray ba(ip.toStdString().data(),ip.size());
     clt.set_config(ba);
 
+}
+
+void MainWindow::on_pushButton_insert_clicked()
+{
+    QString tx=ui->textEdit_input->toPlainText();
+    QByteArray ba(tx.toStdString().data(),tx.size());
+    clt.add_test_server(ba);
+
+}
+
+void MainWindow::on_pushButton_delete_clicked()
+{
+    // int index= ui->lineEdit_cam_index->text().toInt();
+    //  clt.del_camera(index);
+    ui->textEdit_input->clear();
+    ui->textEdit_output->clear();
 }

@@ -139,13 +139,19 @@
           </size>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
+          <item row="1" column="1">
+           <widget class="QTextEdit" name="textEdit_output"/>
+          </item>
+          <item row="0" column="0" colspan="3">
            <widget class="QTextEdit" name="textEdit_config"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QTextEdit" name="textEdit_input"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="12" column="0">
         <widget class="QWidget" name="widget_cmd_area" native="true">
          <property name="minimumSize">
           <size>
@@ -185,7 +191,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="6" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -200,6 +206,20 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushButton_insert">
+         <property name="text">
+          <string>set</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pushButton_delete">
+         <property name="text">
+          <string>clear</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -248,6 +248,13 @@ public:
             prt(info,"fail send");
         }
     }
+    void add_test_server(QByteArray ba)
+    {
+        bool ret= send(ba.data(),ba.length());//talk to server
+        if(!ret){
+            prt(info,"fail send");
+        }
+    }
 
     //    void add_camera(QByteArray cam_cfg,QString url)
     //    {
@@ -398,6 +405,7 @@ public slots:
  //           lock.unlock();
             //        prt(info,"state %d",tcp_socket->state());
             int op=obj["type"].toInt();
+            emit get_ret(doc.toJson());
             switch(op)
             {
             case Protocol::GET_CONFIG:
@@ -470,7 +478,8 @@ public slots:
 
 signals:
     void get_config_done(bool,QByteArray buffer);
-    void need_update_config();
+    void get_ret(QByteArray buffer);
+     void need_update_config();
     void connect_done();
  private:
     bool  send(char *buf,int len)

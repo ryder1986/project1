@@ -36,7 +36,8 @@ public:
     {
         clt.connect_to_server(ip);
         connect(&clt,SIGNAL(get_config_done(bool,QByteArray)),this,SLOT(open_config(bool,QByteArray)));
-        connect(&clt,SIGNAL(connect_done()),this,SLOT(clt_ready()));
+        connect(&clt,SIGNAL(get_ret(QByteArray)),this,SLOT(get_server_msg(QByteArray)));
+          connect(&clt,SIGNAL(connect_done()),this,SLOT(clt_ready()));
     }
 
     void cfg_2_obj(QJsonObject &obj)
@@ -90,6 +91,11 @@ private slots:
     //    {
     //        w->update();
     //    }
+    void get_server_msg(QByteArray ba)
+    {
+          ui->textEdit_output->clear();
+            ui->textEdit_output->setText(ba.toStdString().data());
+    }
 
     void try_add_picture(Player *p)
     {
@@ -187,6 +193,10 @@ private slots:
             players.append(new Player(v));
         }
     }
+    void on_pushButton_insert_clicked();
+
+    void on_pushButton_delete_clicked();
+
 signals:
     void add_picture(Player *);
 

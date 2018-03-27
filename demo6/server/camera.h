@@ -51,6 +51,16 @@ public:
         src=new VideoSource(cam_cfg.url);
         lock.unlock();
     }
+
+    void modify_attr(QJsonValue v)
+    {
+        QJsonObject obj=v.toObject();
+       int di= obj["direction"].toInt();
+       int no=obj["camera_id"].toInt();
+       cam_cfg.direction=di;
+       cam_cfg.camera_id=no;
+    }
+
     QJsonValue config()
     {
         return cfg_2_jv();
@@ -91,16 +101,17 @@ private:
 
     virtual QJsonValue cfg_2_jv()
     {
+         QJsonObject jo;
         QJsonValue jv;
-        jv.toObject()["url"]= cam_cfg.url;
-        jv.toObject()["direction"]=cam_cfg.direction;
-        jv.toObject()["camera_id"]= cam_cfg.camera_id;
-        jv.toObject()["user_name"]= cam_cfg.user_name;
-        jv.toObject()["password"]= cam_cfg.password;
-        jv.toObject()["camera_ip"]= cam_cfg.camera_ip;
-        jv.toObject()["camera_port"]= cam_cfg.camera_port;
-        jv.toObject()["alg"]=cam_cfg.alg;
-
+        jo["url"]= cam_cfg.url;
+        jo["direction"]=cam_cfg.direction;
+        jo["camera_id"]= cam_cfg.camera_id;
+        jo["user_name"]= cam_cfg.user_name;
+        jo["password"]= cam_cfg.password;
+        jo["camera_ip"]= cam_cfg.camera_ip;
+        jo["camera_port"]= cam_cfg.camera_port;
+        jo["alg"]=cam_cfg.alg;
+        jv=jo;
         return jv;
 
     }

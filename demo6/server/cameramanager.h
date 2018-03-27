@@ -14,7 +14,8 @@ public:
     enum{
         MODIFY_ALG,
         MODIFY_URL,
-        MODIFY_DIRECTION
+        MODIFY_DIRECTION,
+        MODIFY_ARGS
     };
     friend class Server;
     explicit CameraManager(QJsonValue config,QObject *parent = 0);
@@ -74,6 +75,7 @@ public:
     {
         if(index<1|index>cameras.size()){
             prt(error,"index out of rean");
+            return ;
         }
         switch(mod_type){
         case MODIFY_ALG:
@@ -91,6 +93,11 @@ public:
         cam_cfgs[index-1]=cameras[index-1]->config();
     }
 
+    void modify_attr(int index,QJsonValue v)
+    {
+         cameras[index-1]->modify_attr(v);
+         cam_cfgs[index-1]= cameras[index-1]->config();
+    }
 
 private:
     void start_cams()
