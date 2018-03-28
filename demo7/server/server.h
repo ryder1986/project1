@@ -165,6 +165,7 @@ public slots:
         case Protocol::DELETE_CAMERA:
         case Protocol::MOD_CAMERA_ALG:
         case Protocol::MOD_CAMERA_ATTR:
+        case Protocol::MOD_DEVICE_ATTR:
         default:
             if(cs->is_valid())
                 config_changed=true;// if client is valid , change can be made
@@ -334,7 +335,11 @@ public slots:
 
         case Protocol::MOD_DEVICE_ATTR:
         {
-
+            int id=obj["deviceID"].toInt();
+            QString name=obj["device_name"].toString();
+            cfg.dev_id=id;
+            cfg.server_name=name;
+            save_cfg();
             break;
         }
             //            case Protocol::NEED_UPDATE:
