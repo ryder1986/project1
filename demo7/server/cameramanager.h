@@ -46,12 +46,12 @@ public:
         {
             index=cameras.size()+1;
         }
-        if(index<0){
+        if(index<1){
             prt(fatal,"index %d out of range",index);
         }else{
             prt(fatal,"insert cam  %d  ",index);
-            cameras.insert(index,new Camera(cfg));
-            cam_cfgs.insert(index,cfg);
+            cameras.insert(index-1,new Camera(cfg));
+            cam_cfgs.insert(index-1,cfg);
         }
     }
 
