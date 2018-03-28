@@ -288,12 +288,12 @@ public slots:
         }
         case Protocol::INSERT_CAMERA:
         {
-            int idx=obj["cam_index"].toInt();
-            if(idx>camera_manager->cameras.size()||idx<1){
-                prt(info,"%d out of range ",idx);
-                pkg["type"]=Protocol::NEED_UPDATE;
-                break;
-            }
+//            int idx=obj["cam_index"].toInt();
+//            if(idx>camera_manager->cameras.size()||idx<1){
+//                prt(info,"%d out of range ",idx);
+//                pkg["type"]=Protocol::NEED_UPDATE;
+//                break;
+//            }
 
 
             QJsonValue v=obj["camera"];
