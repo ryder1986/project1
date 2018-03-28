@@ -105,15 +105,15 @@ public slots:
         int stack=0;
         char *p_tmp=src.data();
         bool flg=false;
-     //    bool flg_real_end=false;
+        //    bool flg_real_end=false;
         //char *p_start=src.data();
-           dst.clear();
-         dst.append(src);
-         int i;
+        dst.clear();
+        dst.append(src);
+        int i;
         if(count_begin_symbol(src)>0){
             for(i=0;i<src.size();i++){
                 if(p_tmp[i]=='{')
-                 {
+                {
                     stack++;
                     flg=true;
                 }
@@ -122,7 +122,7 @@ public slots:
 
 
                 if(stack==0&&flg)
-                  {
+                {
 
                     break;
                 }
@@ -131,7 +131,7 @@ public slots:
             if(i<src.size()){
                 ret=true;
                 if(src[i+1]=='\n')
-                dst.truncate(i+2);
+                    dst.truncate(i+2);
                 else
                     dst.truncate(i+i);
             }
@@ -174,19 +174,28 @@ public slots:
 
         int writes_num=0;
         QByteArray client_buf=skt->readAll();
-      //  QString str(client_buf);
-    //    qDebug()<<"get msg--------------->"<<str;
+        //  QString str(client_buf);
+        //    qDebug()<<"get msg--------------->"<<str;
         QByteArray valid_buf;
         valid_buf.clear();
         tmp_msg.append(client_buf);
         while(get_valid_buf(tmp_msg,valid_buf)) {
             QByteArray rt;
             rt.clear();
-            QString str1(valid_buf);
-            qDebug()<<"vaild msg--------------->"<<str1;
+            QString str_input(valid_buf);
+
+            //     qDebug()<<"vaild msg--------------->"<<str1;
+            prt(info,"get %d bytes",str_input.length());
+            printf("%s\n",str_input.toStdString().data());
             emit client_request(valid_buf,rt,this);
             writes_num=skt->write(rt.data(),rt.size());
-            prt(info,"server reply %d bytes",writes_num);
+            QString str_output(rt);
+            //str2.reserve(20000);
+
+
+            prt(info,"reply %d bytes",writes_num);
+
+            printf("%s\n",str_output.toStdString().data());
         }
     }
     //    int process(char *src_buf,char*dst_buf,int size)
