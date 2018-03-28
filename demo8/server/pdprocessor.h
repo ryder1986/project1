@@ -187,7 +187,7 @@ private:
         }
 
         int key = 0;
-        int wait_time = 1;
+    //    int wait_time = 1;
         int step_size = 9;
         float rate = 0.5;
         bool rect_organization = true;
@@ -262,7 +262,7 @@ private:
             double end_time = cv::getTickCount();
             double spend_time;
             spend_time = 1000 * (fabs(end_time - start_time) / cv::getTickFrequency());
-            std::cout << "time : " << spend_time << " ms" << std::endl;
+        //    std::cout << "time : " << spend_time << " ms" << std::endl;
         }
 
     }

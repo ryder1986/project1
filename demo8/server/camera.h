@@ -35,17 +35,30 @@ public:
         stop_cam();
     }
 
-    void modify_alg(QJsonValue cfg)
+    bool modify_alg(QJsonValue cfg)
     {
+        int ret=true;
         cam_cfg.alg=cfg;
         lock.lock();
-        delete  processor;
-#ifdef TEST
-        processor=new PdDemoProcessor(cam_cfg.alg);
-#else
-        processor=new PdProcessor();
-#endif
+
+        QString str=cfg.toObject()["selected_alg"].toString();
+        cam_cfg.alg=cfg;
+        if(str=="pd"){     delete  processor;
+             processor=new PdProcessor();
+
+        }else if(str=="pd-demo"){    delete  processor;
+            processor=new PdDemoProcessor(cam_cfg.alg);
+        }else{
+            ret=false;
+        }
+
+//#ifdef TEST
+//        processor=new PdDemoProcessor(cam_cfg.alg);
+//#else
+//        processor=new PdProcessor();
+//#endif
            lock.unlock();
+           return ret;
     }
     void modify_direction(QJsonValue dir)
     {
@@ -93,12 +106,12 @@ private:
     void start_cam()
     {
         src=new VideoSource(cam_cfg.url);
-
-#ifdef TEST
-        processor=new PdDemoProcessor(cam_cfg.alg);
-#else
-        processor=new PdProcessor();
-#endif
+        QString str=cam_cfg.alg.toObject()["selected_alg"].toString();
+        if(str=="pd"){
+             processor=new PdProcessor();
+        }else if(str=="pd-demo"){
+            processor=new PdDemoProcessor(cam_cfg.alg);
+        }
 
         start();
     }

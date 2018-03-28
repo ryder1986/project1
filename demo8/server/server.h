@@ -255,11 +255,15 @@ public slots:
 
 
             // QJsonObject alg=obj["alg"].toObject();
-            camera_manager->modify_camera(idx,obj["alg"],CameraManager::MODIFY_ALG);
-            QJsonValue jv= camera_manager->config();
-            // jv_2_cfg(jv);
-            cfg.cams_cfg=jv;
-            save_cfg();
+            if(camera_manager->modify_camera(idx,obj["alg"],CameraManager::MODIFY_ALG)){
+                QJsonValue jv= camera_manager->config();
+                // jv_2_cfg(jv);
+                cfg.cams_cfg=jv;
+                save_cfg();
+
+            }else{
+                pkg["type"]=Protocol::NEED_UPDATE;
+            }
 
             break;
         }
@@ -289,20 +293,24 @@ public slots:
         case Protocol::INSERT_CAMERA:
         {
             int idx=obj["cam_index"].toInt();
-//            if(idx>camera_manager->cameras.size()||idx<1){
-//                prt(info,"%d out of range ",idx);
-//                pkg["type"]=Protocol::NEED_UPDATE;
-//                break;
-//            }
+            //            if(idx>camera_manager->cameras.size()||idx<1){
+            //                prt(info,"%d out of range ",idx);
+            //                pkg["type"]=Protocol::NEED_UPDATE;
+            //                break;
+            //            }
 
 
             QJsonValue v=obj["camera"];
-            camera_manager->insert_camera(idx,v);
-            QJsonValue jv= camera_manager->config();
-            cfg.cams_cfg=jv;
+            if(camera_manager->insert_camera(idx,v)){
+                QJsonValue jv= camera_manager->config();
+                cfg.cams_cfg=jv;
+                save_cfg();
+            }else{
+                pkg["type"]=Protocol::NEED_UPDATE;
+            }
             //  QJsonValue jv_name=cfg.server_name;
             //   jv_2_cfg(jv_name,jv);
-            save_cfg();
+
             break;
         }
         case Protocol::DELETE_CAMERA:

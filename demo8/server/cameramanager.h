@@ -39,20 +39,25 @@ public:
         insert_camera(cameras.size()+1,cfg);
     }
 
-    void insert_camera(int index,QJsonValue cfg)
+    bool insert_camera(int index,QJsonValue cfg)
     {
+        bool ret=false;
 
         if(index>cameras.size()+1 )
         {
             index=cameras.size()+1;
         }
         if(index<1){
+
             prt(fatal,"index %d out of range",index);
         }else{
             prt(fatal,"insert cam  %d  ",index);
             cameras.insert(index-1,new Camera(cfg));
             cam_cfgs.insert(index-1,cfg);
+            ret=true;
+
         }
+        return ret;
     }
 
     //    void insert_camera(int index,QJsonObject cfg)
@@ -75,26 +80,34 @@ public:
 
         }
     }
-    void modify_camera(int index,QJsonValue v,int mod_type)
+    bool modify_camera(int index,QJsonValue v,int mod_type)
     {
+        bool ret=false;
         if(index<1|index>cameras.size()){
             prt(error,"index out of rean");
-            return ;
+            return ret;
         }
-        switch(mod_type){
-        case MODIFY_ALG:
-            cameras[index-1]->modify_alg(v);
-            break;
-        case MODIFY_URL:
-            cameras[index-1]->modify_url(v);
-            break;
-        case MODIFY_DIRECTION:
-            cameras[index-1]->modify_direction(v);
-            break;
-        default:break;
 
+        if( cameras[index-1]->modify_alg(v)){
+            ret=true;
+        }else{
+            return ret;
         }
+//        switch(mod_type){
+//        case MODIFY_ALG:
+//            cameras[index-1]->modify_alg(v);
+//            break;
+//        case MODIFY_URL:
+//            cameras[index-1]->modify_url(v);
+//            break;
+//        case MODIFY_DIRECTION:
+//            cameras[index-1]->modify_direction(v);
+//            break;
+//        default:break;
+
+//        }
         cam_cfgs[index-1]=cameras[index-1]->config();
+        return ret;
     }
 
     void modify_attr(int index,QJsonValue v)

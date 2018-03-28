@@ -28,7 +28,7 @@ SOURCES += main.cpp \
     testpd.cpp \
     pdprocessor.cpp
 
-install_files.files+=config.json  hogcascade_pedestrians.xml
+install_files.files+=config.json  hogcascade_pedestrians.xml combined.txt.model combined2.txt.model
 install_files.path=$$OUT_PWD/
 INSTALLS +=install_files
 
