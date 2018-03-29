@@ -169,7 +169,7 @@ public:
         obj["type"]=Protocol::GET_CONFIG;
         QJsonDocument doc(obj);
 
-        bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+        bool ret= send(doc.toJson());//talk to server
         if(!ret){
             prt(info,"fail send");
         }
@@ -199,8 +199,9 @@ public:
         obj["config"]=doc_config.object();
         QJsonDocument doc(obj);
 
-        bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
-        //  ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+     //   bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+        bool ret= send(doc.toJson());//talk to server
+           //  ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
         //   ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
         if(!ret){
             prt(info,"fail send");
@@ -214,8 +215,9 @@ public:
         obj["cam_index"]=cam_index;
         QJsonDocument doc(obj);
 
-        bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
-        if(!ret){
+     //   bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+        bool ret= send(doc.toJson());//talk to server
+         if(!ret){
             prt(info,"fail send");
         }
     }
@@ -228,7 +230,8 @@ public:
         obj["cam_index"]=cam_index;
         QJsonDocument doc(obj);
 
-        bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+      //  bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+        bool ret= send(doc.toJson());//talk to server
         if(!ret){
             prt(info,"fail send");
         }
@@ -243,15 +246,17 @@ public:
         obj["camera"]=obj_cam;
         QJsonDocument doc(obj);
         int len=doc.toJson().length();
-        bool ret= send(doc.toJson().data(),len);//talk to server
+      //  bool ret= send(doc.toJson().data(),len);//talk to server
+        bool ret= send(doc.toJson());//talk to server
         if(!ret){
             prt(info,"fail send");
         }
     }
     void add_test_server(QByteArray ba)
     {
-        bool ret= send(ba.data(),ba.length());//talk to server
-        if(!ret){
+       // bool ret= send(ba.data(),ba.length());//talk to server
+        bool ret= send(ba);//talk to server
+         if(!ret){
             prt(info,"fail send");
         }
     }
@@ -268,7 +273,8 @@ public:
         obj["cam_index"]=index;
         QJsonDocument doc(obj);
 
-        bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+       // bool ret= send(doc.toJson().data(),doc.toJson().length());//talk to server
+        bool ret= send(doc.toJson());//talk to server
         if(!ret){
             prt(info,"fail send");
         }
@@ -482,12 +488,54 @@ signals:
      void need_update_config();
     void connect_done();
  private:
-    bool  send(char *buf,int len)
+//    bool  send(char *buf,int len)
+//    {
+//        bool ret=false;
+//        int write_bytes=0;
+
+//        write_bytes=tcp_socket->write(buf,len);
+//        bool flush_ret=tcp_socket->flush();//TODO,not work for flush
+//        if(flush_ret){
+//            prt(info,"flush ok");
+//        }else{
+//            prt(info,"flush err");
+//        }
+
+//        if(write_bytes!=len){
+//            prt(info,"send %d bytes in state %d , %d bytes left",write_bytes,tcp_socket->state(),len-write_bytes);
+//        }else{
+//            ret=true;
+//        }
+//        return ret;
+//    }
+
+//    bool  send(const QString str)
+//    {
+//        QByteArray ba=str.toUtf8();
+//        bool ret=false;
+//        int write_bytes=0;
+//        int len=str.length();
+//        write_bytes=tcp_socket->write(ba.data(),ba.length());
+//        bool flush_ret=tcp_socket->flush();//TODO,not work for flush
+//        if(flush_ret){
+//            prt(info,"flush ok");
+//        }else{
+//            prt(info,"flush err");
+//        }
+
+//        if(write_bytes!=len){
+//            prt(info,"send %d bytes in state %d , %d bytes left",write_bytes,tcp_socket->state(),len-write_bytes);
+//        }else{
+//            ret=true;
+//        }
+//        return ret;
+//    }
+    bool  send(const QByteArray ba)
     {
         bool ret=false;
         int write_bytes=0;
-
-        write_bytes=tcp_socket->write(buf,len);
+        int len=ba.length();
+        write_bytes=tcp_socket->write(ba.data(),ba.length());
         bool flush_ret=tcp_socket->flush();//TODO,not work for flush
         if(flush_ret){
             prt(info,"flush ok");

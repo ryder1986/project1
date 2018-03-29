@@ -80,16 +80,14 @@ void MainWindow::on_comboBox_activated(int index)
 void MainWindow::on_pushButton_save_clicked()
 {
 
-    QString ip=ui->textEdit_config->toPlainText();
-    QByteArray ba(ip.toStdString().data(),ip.size());
+    QByteArray ba=ui->textEdit_config->toPlainText().toUtf8();
     clt.set_config(ba);
 
 }
 
 void MainWindow::on_pushButton_insert_clicked()
 {
-    QString tx=ui->textEdit_input->toPlainText();
-    QByteArray ba(tx.toStdString().data(),tx.size());
+    QByteArray ba=ui->textEdit_input->toPlainText().toUtf8();
     clt.add_test_server(ba);
 
 }
