@@ -83,7 +83,7 @@ public slots:
     void check_rate()
     {
         //frame_rate++;
-        prt(info,"frame rate :%d ",frame_rate);
+      //  prt(info,"frame rate :%d ",frame_rate);
         frame_rate=0;
     }
 

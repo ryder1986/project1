@@ -45,6 +45,7 @@ public:
         cam_cfg.alg=cfg;
         if(str=="pd"){     delete  processor;
              processor=new PdProcessor();
+            cam_cfg.alg.toObject()["pd"].toObject()["detect_area"]=cfg.toObject()["pd"].toObject()["detect_area"];
 
         }else if(str=="pd-demo"){    delete  processor;
             processor=new PdDemoProcessor(cam_cfg.alg);

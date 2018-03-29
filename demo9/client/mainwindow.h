@@ -37,7 +37,7 @@ public:
         clt.connect_to_server(ip);
         connect(&clt,SIGNAL(get_config_done(bool,QByteArray)),this,SLOT(open_config(bool,QByteArray)));
         connect(&clt,SIGNAL(get_ret(QByteArray)),this,SLOT(get_server_msg(QByteArray)));
-          connect(&clt,SIGNAL(connect_done()),this,SLOT(clt_ready()));
+        connect(&clt,SIGNAL(connect_done()),this,SLOT(clt_ready()));
     }
 
     void cfg_2_obj(QJsonObject &obj)
@@ -93,8 +93,39 @@ private slots:
     //    }
     void get_server_msg(QByteArray ba)
     {
-          ui->textEdit_output->clear();
-            ui->textEdit_output->setText(ba.toStdString().data());
+        ui->textEdit_output->clear();
+        ui->textEdit_output->setText(ba.toStdString().data());
+    }
+
+    void rect_changed(QList <QPoint> lst)
+    {
+          prt(info,"new points");
+            QJsonArray ps;
+
+        foreach (QPoint p, lst) {
+            prt(info,"(%d %d)",p.x(),p.y());
+            QJsonObject v;
+            v["x"]=p.x();
+            v["y"]=p.y();
+            ps.append(v);
+            }
+        QJsonObject o;
+        o["type"]=6;
+        o["cam_index"]=1;
+        QJsonObject obj;
+        obj["selected_alg"]="pd";
+
+             QJsonObject o1;
+         o1["detect_area"]=ps;
+
+         obj["pd"]=o1;
+         //   obj
+        o["alg"]=obj;
+        QJsonDocument doc(o);
+        QByteArray ba=doc.toJson();
+
+        ui->textEdit_output->setText(ba);
+
     }
 
     void try_add_picture(Player *p)
@@ -129,9 +160,12 @@ private slots:
                 if(select){
                     pp->set_show(true);
                     connect(&data_rcv,SIGNAL(send_rst(QByteArray)),pp,SLOT(set_layout_data(QByteArray)));
+                    connect(pp,SIGNAL(rect_changed(QList<QPoint>)),this,SLOT(rect_changed(QList<QPoint>)));
                     clt.focus_camera(players.indexOf(p)+1);
                 }else{
-                       pp->set_show(false);
+                    pp->set_show(false);
+                    disconnect(pp,SIGNAL(rect_changed(QList<QPoint>)),this,SLOT(rect_changed(QList<QPoint>)));
+
                     clt.disfocus_camera(players.indexOf(p)+1);
                     disconnect(&data_rcv,SIGNAL(send_rst(QByteArray)),pp,SLOT(set_layout_data(QByteArray)));
                 }
