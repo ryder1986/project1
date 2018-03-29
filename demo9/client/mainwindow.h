@@ -35,8 +35,10 @@ public:
     void open_device(QString ip)
     {
         clt.connect_to_server(ip);
-        connect(&clt,SIGNAL(get_config_done(bool,QByteArray)),this,SLOT(open_config(bool,QByteArray)));
-        connect(&clt,SIGNAL(get_ret(QByteArray)),this,SLOT(get_server_msg(QByteArray)));
+        connect(&clt,SIGNAL(signal_get_config_done(bool,QByteArray)),this,
+                SLOT(slot_open_config(bool,QByteArray)));
+        connect(&clt,SIGNAL(get_ret(QByteArray)),this,
+                SLOT(get_server_msg(QByteArray)));
         connect(&clt,SIGNAL(connect_done()),this,SLOT(clt_ready()));
     }
 
@@ -66,7 +68,7 @@ public:
     void play()//this will be call in helper thread
     {
         QJsonArray cams=  cfg.cams_cfg.toArray();
- qDebug()<<"----sssss--------";
+        qDebug()<<"----sssss--------";
         foreach (Player *p, players) {
             QObjectList ls=ui->groupBox_picture->children();
             qDebug()<<ls.size()<<"------------";
@@ -84,10 +86,6 @@ public:
     void  play_start();
 
 private slots:
-    //    void  update_pic(QWidget *w)
-    //    {
-    //        w->update();
-    //    }
     void get_server_msg(QByteArray ba)
     {
         ui->textEdit_output->clear();
@@ -96,8 +94,8 @@ private slots:
 
     void rect_changed(QList <QPoint> lst)
     {
-          prt(info,"new points");
-            QJsonArray ps;
+        prt(info,"new points");
+        QJsonArray ps;
 
         foreach (QPoint p, lst) {
             prt(info,"(%d %d)",p.x(),p.y());
@@ -105,18 +103,18 @@ private slots:
             v["x"]=p.x();
             v["y"]=p.y();
             ps.append(v);
-            }
+        }
         QJsonObject o;
         o["type"]=6;
         o["cam_index"]=1;
         QJsonObject obj;
         obj["selected_alg"]="pd";
 
-             QJsonObject o1;
-         o1["detect_area"]=ps;
+        QJsonObject o1;
+        o1["detect_area"]=ps;
 
-         obj["pd"]=o1;
-         //   obj
+        obj["pd"]=o1;
+        //   obj
         o["alg"]=obj;
         QJsonDocument doc(o);
         QByteArray ba=doc.toJson();
@@ -180,15 +178,13 @@ private slots:
         }
     }
 
-    void open_config(bool ,QByteArray ba)
+    void slot_open_config(bool ,QByteArray ba)
     {
-        prt(info,"---> get %d  bytes",ba.size());
-        //   ui->textEdit_config->
+        prt(debug,"get %d  bytes",ba.size());
         QJsonDocument doc=QJsonDocument::fromJson(ba);
         QJsonObject obj=doc.object();
         obj_2_cfg(obj);
         QString str(ba);
-        prt(info,"---> get %d   ",str.size());
         ui->textEdit_config->setText(str);
         play_start();
     }

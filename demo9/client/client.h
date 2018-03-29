@@ -411,7 +411,7 @@ public slots:
             case Protocol::GET_CONFIG:
             {
                 QJsonDocument d(obj["config"].toObject());
-                emit get_config_done(true,d.toJson());
+                emit signal_get_config_done(true,d.toJson());
             }
                 break;
             case Protocol::NEED_UPDATE:
@@ -477,7 +477,7 @@ public slots:
     //    }
 
 signals:
-    void get_config_done(bool,QByteArray buffer);
+    void signal_get_config_done(bool,QByteArray buffer);
     void get_ret(QByteArray buffer);
      void need_update_config();
     void connect_done();

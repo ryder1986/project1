@@ -430,14 +430,10 @@ private:
         obj["ntp_ip"]=cfg.ntp_ip;
         obj["ntp_port"]=cfg.ntp_port;
         obj["cameras"]=cfg.cams_cfg;
-
-
     }
 
     void obj_2_cfg(QJsonObject obj)
     {
-
-
         cfg.server_name=obj["device_name"].toString();
         cfg.dev_id=obj["deviceID"].toInt();
         cfg.sig_ip=obj["signal_machine_ip"].toString();
