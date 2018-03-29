@@ -66,8 +66,10 @@ public:
     void play()//this will be call in helper thread
     {
         QJsonArray cams=  cfg.cams_cfg.toArray();
-
+ qDebug()<<"----sssss--------";
         foreach (Player *p, players) {
+            QObjectList ls=ui->groupBox_picture->children();
+            qDebug()<<ls.size()<<"------------";
             delete p;
         }
         players.clear();
@@ -77,11 +79,6 @@ public:
             players.last()->start();
 
         }
-
-
-        //        emit add_picture(players.last());
-        //        players.last()->start();
-        Qt::HANDLE handle=QThread::currentThreadId();
 
     }
     void  play_start();

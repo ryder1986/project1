@@ -43,23 +43,21 @@ public:
 
         QString str=cfg.toObject()["selected_alg"].toString();
         cam_cfg.alg=cfg;
-        if(str=="pd"){     delete  processor;
-             processor=new PdProcessor();
+        if(str=="pd"){
+            delete  processor;
+            processor=new PdProcessor();
             cam_cfg.alg.toObject()["pd"].toObject()["detect_area"]=cfg.toObject()["pd"].toObject()["detect_area"];
 
-        }else if(str=="pd-demo"){    delete  processor;
+        }else if(str=="pd-demo"){
+            delete  processor;
             processor=new PdDemoProcessor(cam_cfg.alg);
+            cam_cfg.alg.toObject()["pd-demo"].toObject()["detect_area"]=cfg.toObject()["pd-demo"].toObject()["detect_area"];
         }else{
             ret=false;
         }
 
-//#ifdef TEST
-//        processor=new PdDemoProcessor(cam_cfg.alg);
-//#else
-//        processor=new PdProcessor();
-//#endif
-           lock.unlock();
-           return ret;
+        lock.unlock();
+        return ret;
     }
     void modify_direction(QJsonValue dir)
     {
@@ -77,10 +75,10 @@ public:
     void modify_attr(QJsonValue v)
     {
         QJsonObject obj=v.toObject();
-       int di= obj["direction"].toInt();
-       int no=obj["camera_id"].toInt();
-       cam_cfg.direction=di;
-       cam_cfg.camera_id=no;
+        int di= obj["direction"].toInt();
+        int no=obj["camera_id"].toInt();
+        cam_cfg.direction=di;
+        cam_cfg.camera_id=no;
     }
 
     QJsonValue config()
@@ -109,7 +107,7 @@ private:
         src=new VideoSource(cam_cfg.url);
         QString str=cam_cfg.alg.toObject()["selected_alg"].toString();
         if(str=="pd"){
-             processor=new PdProcessor();
+            processor=new PdProcessor();
         }else if(str=="pd-demo"){
             processor=new PdDemoProcessor(cam_cfg.alg);
         }
@@ -129,7 +127,7 @@ private:
 
     virtual QJsonValue cfg_2_jv()
     {
-         QJsonObject jo;
+        QJsonObject jo;
         QJsonValue jv;
         jo["url"]= cam_cfg.url;
         jo["direction"]=cam_cfg.direction;
