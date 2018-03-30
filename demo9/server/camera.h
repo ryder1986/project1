@@ -186,7 +186,7 @@ protected:
             //            ba.append(t+i++%9);
             //            emit output(ba);
             lock.lock();
-            if(src->get_frame(frame)){
+            if(src->get_frame(frame)&&frame.cols>0&&frame.rows>0){
                 frame_rate++;
                 bool ret=processor->process(frame,rst);
                 //prt(info,"get rst %s ",rst.data());

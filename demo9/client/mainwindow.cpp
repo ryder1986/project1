@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    pt=NULL;
     flg=0;
     ui->setupUi(this);
     //    ply=new Player(ui->groupBox_picture);
@@ -31,11 +32,14 @@ MainWindow::~MainWindow()
 void MainWindow::play_start()
 {
 
-    starter_thread.setObjectName("players manager");
+  //  starter_thread.setObjectName("players manager");
     //    player_starter=new Tmp(players,cfg.cams_cfg);
+   if(pt)
+       delete pt;
     pt=new PlayThread(this);
     pt->moveToThread(&starter_thread);
     connect(&starter_thread,SIGNAL(started()),pt,SLOT(play()));
+
     starter_thread.start();
 }
 

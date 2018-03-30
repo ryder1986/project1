@@ -81,6 +81,11 @@ public:
             players.last()->start();
 
         }
+//        foreach (Player *p, players) {
+//           if( p->wait()){
+//               prt(info,"stop a thread");
+//           }
+//        }
 
     }
     void  play_start();
