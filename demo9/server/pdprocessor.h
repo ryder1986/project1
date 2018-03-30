@@ -43,7 +43,7 @@ public:
 
         detect_area=Rect(x_min,y_min,x_max-x_min,y_max-y_min);
 
-        prt(info,"[ %d %d %d %d]",detect_area.x,detect_area.y,detect_area.width,detect_area.height);
+        prt(info,"start pd in rect [ %d %d %d %d]",detect_area.x,detect_area.y,detect_area.width,detect_area.height);
         loaded=false;
     }
     bool process(Mat src_mt,QByteArray &rst)

@@ -215,7 +215,7 @@ signals:
 public slots:
     void handle_time_up()
     {
-        prt(info,"%s framerate:%d,(id:%x)",cam_cfg.url.toStdString().data(),frame_rate,threadid);
+       // prt(info,"%s framerate:%d,(id:%x)",cam_cfg.url.toStdString().data(),frame_rate,threadid);
         frame_rate=0;
     }
 

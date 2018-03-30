@@ -31,6 +31,7 @@ public:
         }
 
             detect_area=Rect(x_min,y_min,x_max-x_min,y_max-y_min);
+               prt(info,"start pd-demo in rect [ %d %d %d %d]",detect_area.x,detect_area.y,detect_area.width,detect_area.height);
     }
     bool process(Mat mt,QByteArray &rst)
     {
