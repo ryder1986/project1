@@ -45,13 +45,14 @@ public:
         cam_cfg.alg=cfg;
         if(str=="pd"){
             delete  processor;
-            processor=new PdProcessor();
-            cam_cfg.alg.toObject()["pd"].toObject()["detect_area"]=cfg.toObject()["pd"].toObject()["detect_area"];
+
+            QJsonValue v=cam_cfg.alg.toObject()["pd"].toObject()["detect_area"]=cfg.toObject()["pd"].toObject()["detect_area"];
+            processor=new PdProcessor(v);
 
         }else if(str=="pd-demo"){
             delete  processor;
-            processor=new PdDemoProcessor(cam_cfg.alg);
-            cam_cfg.alg.toObject()["pd-demo"].toObject()["detect_area"]=cfg.toObject()["pd-demo"].toObject()["detect_area"];
+            QJsonValue v=cam_cfg.alg.toObject()["pd-demo"].toObject()["detect_area"]=cfg.toObject()["pd-demo"].toObject()["detect_area"];
+             processor=new PdDemoProcessor(v);
         }else{
             ret=false;
         }
@@ -107,9 +108,12 @@ private:
         src=new VideoSource(cam_cfg.url);
         QString str=cam_cfg.alg.toObject()["selected_alg"].toString();
         if(str=="pd"){
-            processor=new PdProcessor();
+            QJsonValue v=cam_cfg.alg.toObject()["pd"].toObject()["detect_area"];
+            processor=new PdProcessor(v);
+         //   processor=new PdProcessor();
         }else if(str=="pd-demo"){
-            processor=new PdDemoProcessor(cam_cfg.alg);
+            QJsonValue v=cam_cfg.alg.toObject()["pd-demo"].toObject()["detect_area"] ;
+             processor=new PdDemoProcessor(v);
         }
 
         start();

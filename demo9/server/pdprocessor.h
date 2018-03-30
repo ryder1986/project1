@@ -2,6 +2,8 @@
 #define PDPROCESSOR_H
 
 #include <QObject>
+#include <QJsonArray>
+#include <QJsonValue>
 #include "videoprocessor.h"
 
 #include <opencv2/highgui/highgui.hpp>
@@ -13,9 +15,35 @@ using namespace cv;
 
 class PdProcessor : public VideoProcessor
 {
+    Rect detect_area;
 public:
-    PdProcessor():scanner(HUMAN_height,HUMAN_width,HUMAN_xdiv,HUMAN_ydiv,256,0.8)
+    PdProcessor(QJsonValue area):scanner(HUMAN_height,HUMAN_width,HUMAN_xdiv,HUMAN_ydiv,256,0.8)
     {
+        int x_min=10000;
+        int y_min=10000;
+        int x_max=0;
+        int y_max=0;
+        foreach (QJsonValue v, area.toArray()) {
+            int x= v.toObject()["x"].toInt();
+
+
+            int y= v.toObject()["y"].toInt();
+
+
+            if(x<x_min)
+                x_min=x;
+            if(x>x_max)
+                x_max=x;
+            if(y<y_min)
+                y_min=y;
+            if(y>y_max)
+                y_max=y;
+        }
+
+
+        detect_area=Rect(x_min,y_min,x_max-x_min,y_max-y_min);
+
+        prt(info,"[ %d %d %d %d]",detect_area.x,detect_area.y,detect_area.width,detect_area.height);
         loaded=false;
     }
     bool process(Mat src_mt,QByteArray &rst)
@@ -23,18 +51,21 @@ public:
         bool ret=false;
         rst.clear();
         //   DetectionScanner scanner(HUMAN_height,HUMAN_width,HUMAN_xdiv,HUMAN_ydiv,256,0.8);
-        Rect detect_area;
-       // Rect  detect_area(275, 325, 600,215);
+      //  Rect detect_area;
+        // Rect  detect_area(275, 325, 600,215);
 
         int mat_w=src_mt.cols;
         int mat_h=src_mt.rows;
         vector <Rect> rects;
-        detect_pedestrians(src_mt,detect_area,rects);
+        if(detect_area.width+detect_area.x<src_mt.cols&& detect_area.height+detect_area.y<src_mt.rows){
+            Mat mt=src_mt(detect_area);
+            detect_pedestrians(mt,rects);
+        }
         if(rects.size()>0){
             rst.append(QString::number(mat_w)).append(",").append(QString::number(mat_h)).append(":");
             foreach (Rect r, rects) {
-                QString x_str=QString::number(r.x);
-                QString y_str=QString::number(r.y);
+                QString x_str=QString::number(r.x+detect_area.x/2);
+                QString y_str=QString::number(r.y+detect_area.y/2);
                 QString width_str=QString::number(r.width);
                 QString height_str=QString::number(r.height);
                 rst.append(x_str).append(",").append(y_str).append(",").append(width_str).append(",").append(height_str).append(":");
@@ -165,8 +196,8 @@ private:
         //upper_bounds.push_back(117);	//353
 
         upper_bounds.push_back(20);	//353
-  //      upper_bounds.push_back(50);	//353
-//         // upper_bounds.push_back(353);	//353
+        //      upper_bounds.push_back(50);	//353
+        //         // upper_bounds.push_back(353);	//353
         filenames.push_back("combined2.txt.model");
 
         ds.LoadDetector(types,upper_bounds,filenames);
@@ -176,7 +207,7 @@ private:
     }
 
 
-    void detect_pedestrians( Mat &src_image, cv::Rect &detect_rect, std::vector<cv::Rect> &result_rects)
+    void detect_pedestrians( Mat &src_image, std::vector<cv::Rect> &result_rects)
     {
 
         if(!loaded){
@@ -186,10 +217,10 @@ private:
             loaded=true;
         }
 
-        int key = 0;
-    //    int wait_time = 1;
+        //    int key = 0;
+        //    int wait_time = 1;
         int step_size = 9;
-        float rate = 0.5;
+        //   float rate = 0.5;
         bool rect_organization = true;
         IntImage<double> original;
 
@@ -209,28 +240,28 @@ private:
                 // break;
             }
 
-            if (rate < 1 && (src_image.cols >= 960 || src_image.rows >= 480))
-            {
-                cv::resize(src_image, src_image, cv::Size(), rate, rate);
-            }
-            if(detect_rect.x>=src_image.cols||detect_rect.y>=src_image.rows){
+            //            if (rate < 1 && (src_image.cols >= 960 || src_image.rows >= 480))
+            //            {
+            //     cv::resize(src_image, src_image, cv::Size(), rate, rate);
+            //            }
+            //            if(detect_rect.x>=src_image.cols||detect_rect.y>=src_image.rows){
 
-                detect_rect.x=src_image.cols;
-                        detect_rect.y=src_image.rows;
-                //exit(0);
-            }
-            detect_rect.width?(detect_rect.width>src_image.cols):src_image.cols;
-            detect_rect.height?(detect_rect.height>src_image.rows):src_image.rows;
+            //                detect_rect.x=src_image.cols;
+            //                  detect_rect.y=src_image.rows;
+            //                //exit(0);
+            //            }
+            //            detect_rect.width?(detect_rect.width>src_image.cols):src_image.cols;
+            //            detect_rect.height?(detect_rect.height>src_image.rows):src_image.rows;
 
-            if(detect_rect.width==0||detect_rect.height==0)
-            {
+            //  if(detect_rect.width==0||detect_rect.height==0)
+            //   {
 
-                detect_rect.x=0;
-                detect_rect.y=0;
-                detect_rect.width=src_image.cols;
-                detect_rect.height=src_image.rows;
-            }
-            cv::Mat detect_region = src_image(detect_rect);
+            //                detect_rect.x=0;
+            //                detect_rect.y=0;
+            //                detect_rect.width=src_image.cols;
+            //                detect_rect.height=src_image.rows;
+            //   }
+            cv::Mat detect_region = src_image;
 
             original.Load( detect_region );
             std::vector<CRect> results;
@@ -246,23 +277,23 @@ private:
             for(size_t i = 0; i < results.size(); i++)
             {
                 cv::Rect real_position;
-                real_position.x = results[i].left;
-                real_position.y = results[i].top;
-                real_position.width = results[i].right - results[i].left;
-                real_position.height = results[i].bottom - results[i].top;
+                real_position.x = results[i].left/2;
+                real_position.y = results[i].top/2;
+                real_position.width = (results[i].right - results[i].left)/2;
+                real_position.height = (results[i].bottom - results[i].top)/2;
 
-                cv::rectangle(detect_region, real_position, cv::Scalar(0,255,0), 2);
+                //   cv::rectangle(detect_region, real_position, cv::Scalar(0,255,0), 2);
                 result_rects.push_back(real_position);
             }
-            rectangle(src_image, detect_rect, cv::Scalar(0,255,255), 2);		//画出检测区域
-        //    cv::imshow("result",src_image);
+            //   rectangle(src_image, detect_rect, cv::Scalar(0,255,255), 2);		//画出检测区域
+            //    cv::imshow("result",src_image);
 
-          //  key = cv::waitKey( wait_time );
+            //  key = cv::waitKey( wait_time );
 
             double end_time = cv::getTickCount();
             double spend_time;
             spend_time = 1000 * (fabs(end_time - start_time) / cv::getTickFrequency());
-        //    std::cout << "time : " << spend_time << " ms" << std::endl;
+            //    std::cout << "time : " << spend_time << " ms" << std::endl;
         }
 
     }
