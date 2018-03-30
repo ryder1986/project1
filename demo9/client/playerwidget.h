@@ -144,9 +144,12 @@ public:
         if(pns.size()==4){
             //  prt(info,"ps ok");
 
-            QBrush brush1(QColor(0,220,0,111));
-            QPen pen(brush1,20);
-            pt->setPen(pen);
+            //            QBrush brush1(QColor(0,0,222));
+            //            QPen pen(brush1,5);
+            //            pt->setPen(pen);
+
+            pt->setPen( QPen (QBrush (QColor(0,0,222)),5));
+
             QPointF p[4];
             //            p[0]=pns[0];
             //            p[1]=pns[1];
@@ -163,6 +166,15 @@ public:
             for(int i=0;i<4;i++){
 
                 p[i]=pns_now[i];
+                pt->drawEllipse(p[i],10,10);
+                if(picked&&i==index){
+
+                    pt->save();
+                    pt->setPen( QPen (QBrush (QColor(222,0,0)),5));
+                    pt->drawEllipse(p[i],10,10);
+                    pt->restore();
+                }
+
             }
 
 
@@ -172,8 +184,8 @@ public:
             //            p[2].setX(p[2].x()*w/wi); p[2].setY(p[2].y()*h/he);
             //            p[3].setX(p[3].x()*w/wi); p[3].setY(p[3].y()*h/he);
 
-          //  pt->drawPolyline((QPointF *)p,4);
-
+            //  pt->drawPolyline((QPointF *)p,4);
+            pt->setPen( QPen (QBrush (QColor(0,0,222)),5));
             pt->drawPolygon((QPointF *)p,4);
         }else{
             prt(info,"ps err");
