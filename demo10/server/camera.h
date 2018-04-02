@@ -177,6 +177,7 @@ protected:
         QByteArray ba;
         //   src->start();
         Mat frame;
+        Mat frame960x540;
         threadid=(int)QThread::currentThread();
         QByteArray rst;
         while(!quit){
@@ -192,7 +193,9 @@ protected:
             lock.lock();
             if(src->get_frame(frame)&&frame.cols>0&&frame.rows>0){
                 frame_rate++;
-                bool ret=processor->process(frame,rst);
+              //  frame960x540=frame.resize(960,540);
+                  cv::resize(frame, frame960x540, cv::Size(), 960.0/frame.cols,540/frame.rows);
+                bool ret=processor->process(frame960x540,rst);
                 //prt(info,"get rst %s ",rst.data());
                 if(ret){
                     ba.clear();

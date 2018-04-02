@@ -8,8 +8,14 @@
 	"ntp_port":1111,
 	"cameras": [
 		{
-			"url": "rtsp://192.168.1.216:8554/test1",
-			"direction":1,
+            "url0": "/media/211/videos/09_30_26-960x540x15.avi",
+            "url": "rtsp://192.168.1.224:8554/test1",
+            "url2": "rtsp://192.168.1.216:8554/test3",
+            "url3": "rtsp://192.168.1.216:8554/test4",
+            "url4": "rtsp://192.168.1.216:8554/test5",
+            "url4": "rtsp://192.168.1.216:8554/test5",
+            "url4": "rtsp://192.168.1.216:8554/test5",
+                   "direction":1,
 			"camera_id":3,
 			"user_name":"xxx",
 			"password":"xxx",
@@ -41,7 +47,7 @@
 			}
 		},
 		{
-			"url": "rtsp://192.168.1.216:8554/test1",
+       "url": "rtsp://192.168.1.217:8554/test1",
 			"direction":1,
 			"camera_id":4,
 			"user_name":"xxx",
