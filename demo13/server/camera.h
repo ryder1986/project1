@@ -59,17 +59,17 @@ public:
 
         rst.clear();
         Rect rct=processor->rect();
-        Mat detect=mt(rct);
+        Mat detect_area=mt(rct);//get valid area
         bool  ret=false;
         int mat_w=mt.cols;
         int mat_h=mt.rows;
         vector <Rect> rects;
 
-        if(processor->real_process(detect,rects)){
+        if(processor->real_process(detect_area,rects)){
             rst.append(QString::number(mat_w)).append(",").append(QString::number(mat_h)).append(":");
             foreach (Rect r, rects) {
-                QString x_str=QString::number(r.x+rct.x/2);
-                QString y_str=QString::number(r.y+rct.y/2);
+                QString x_str=QString::number(r.x+rct.x);
+                QString y_str=QString::number(r.y+rct.y);
                 QString width_str=QString::number(r.width);
                 QString height_str=QString::number(r.height);
                 rst.append(x_str).append(",").append(y_str).append(",").append(width_str).append(",").append(height_str).append(":");
@@ -206,7 +206,7 @@ protected:
         int i=0;
         QByteArray ba;
         Mat frame;
-        Mat frame960x540;
+    //    Mat frame960x540;
         threadid=(int)QThread::currentThread();
         QByteArray rst;
         while(!quit){
@@ -215,8 +215,8 @@ protected:
             if(src->get_frame(frame)&&frame.cols>0&&frame.rows>0){
                 frame_rate++;
                 //  frame960x540=frame.resize(960,540);
-                cv::resize(frame, frame960x540, cv::Size(), 960.0/frame.cols,540/frame.rows);
-                bool ret=process(frame960x540,rst);
+               // cv::resize(frame, frame960x540, cv::Size(960,540) );
+                bool ret=process(frame,rst);
                 if(ret){
                     ba.clear();
                     ba.append(rst);

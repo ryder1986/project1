@@ -244,7 +244,7 @@ private:
                 PostProcess(results,0);
                 RemoveCoveredRectangles(results);
             }
-
+#if 0
             for(size_t i = 0; i < results.size(); i++)
             {
                 cv::Rect real_position;
@@ -256,6 +256,22 @@ private:
                 //   cv::rectangle(detect_region, real_position, cv::Scalar(0,255,0), 2);
                 result_rects.push_back(real_position);
             }
+#else
+
+            for(size_t i = 0; i < results.size(); i++)
+            {
+                cv::Rect real_position;
+                real_position.x = results[i].left;
+                real_position.y = results[i].top;
+                real_position.width = (results[i].right - results[i].left);
+                real_position.height = (results[i].bottom - results[i].top);
+
+                //   cv::rectangle(detect_region, real_position, cv::Scalar(0,255,0), 2);
+                result_rects.push_back(real_position);
+            }
+
+
+#endif
             //   rectangle(src_image, detect_rect, cv::Scalar(0,255,255), 2);		//画出检测区域
             //    cv::imshow("result",src_image);
 

@@ -11,7 +11,7 @@
 #include "tool.h"
 class LayoutPainter{
 public:
-    LayoutPainter(  QList <QPoint> ps):pns(ps),wi_ori(640),he_ori(480)
+    LayoutPainter(  QList <QPoint> ps):pns(ps),picture_w(640),picture_h(480)
     {
         index=-1;
         data.clear();
@@ -57,7 +57,7 @@ public:
                 QRect r;
 
                 if(l.size()==4){
-                    r.setRect(l[0].toInt()*window_w/wi_ori*2,l[1].toInt()*window_h/he_ori*2,l[2].toInt()*window_w/wi_ori*2, l[3].toInt()*window_h/he_ori*2);
+                    r.setRect(l[0].toInt()*window_w/alg_w,l[1].toInt()*window_h/alg_h,l[2].toInt()*window_w/alg_w, l[3].toInt()*window_h/alg_h);
       //              r.setRect(l[0].toInt()*window_w/960*2,l[1].toInt()*window_h/540*2,l[2].toInt()*window_w/960*2, l[3].toInt()*window_h/540*2);
 
                     //                    // rcts.append(r);
@@ -65,11 +65,11 @@ public:
                     test->drawRect(r);
                 }else
                     if(l.size()==2){
-                        int wid=l[0].toInt();
-                        int hei=l[1].toInt();
+                        alg_w=l[0].toInt();
+                        alg_h=l[1].toInt();
                         //   prt(info,"(get %d %d)",wid,hei);
-                        wi_ori=wid;
-                        he_ori=hei;
+//                        wi_ori=wid;
+//                        he_ori=hei;
 //                        wi_ori=640;
 //                        he_ori=480;
                     }
@@ -126,7 +126,7 @@ public:
         pns_now.clear();
         if(pns.size()==4){
             for(i=0;i<4;i++)
-              pns_now.append((QPoint(pns[i].x()*window_w/wi_ori,pns[i].y()*window_h/he_ori)));
+              pns_now.append((QPoint(pns[i].x()*window_w/picture_w,pns[i].y()*window_h/picture_h)));
     //          pns_now.append((QPoint(pns[i].x()*window_w/640,pns[i].y()*window_h/480)));
                 }
     }
@@ -135,14 +135,16 @@ public:
         int i=0;
         if(pns_now.size()==4){
             for(i=0;i<4;i++)
-               pns[i]=QPoint(pns_now[i].x()*wi_ori/window_w,pns_now[i].y()*he_ori/window_h);
+               pns[i]=QPoint(pns_now[i].x()*picture_w/window_w,pns_now[i].y()*picture_h/window_h);
             //    pns[i]=QPoint(pns_now[i].x()*wi_ori/window_w,pns_now[i].y()*he_ori/window_h);
           //   pns[i]=QPoint(pns_now[i].x()*640/window_w,pns_now[i].y()*480/window_h);
                }
     }
 
-    void paint_rect(QPainter *pt)
+    void paint_rect(QPainter *pt,int w,int h)
     {
+        picture_w=w;
+        picture_h=h;
         window_w=pt->window().width();
         window_h=pt->window().height();
         get_points();
@@ -208,8 +210,12 @@ private:
     QList <QPoint> pns_now;
     bool picked;
     int index;
-    int wi_ori;
-    int he_ori;
+    int picture_w;
+    int picture_h;
+    int alg_w;
+    int alg_h;
+
+
     int window_w;
     int window_h;
 };
@@ -281,7 +287,7 @@ protected:
             }
 
             if(show_info){
-                pt->paint_rect(&painter);
+                pt->paint_rect(&painter,img.width(),img.height());
             }
 
             //            painter.drawText(QPointF(111,111),title);
