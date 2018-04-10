@@ -179,16 +179,29 @@ private:
 
         types.push_back(NodeDetector::CD_LIN); // first node
         //upper_bounds.push_back(256);	//100
+
+#if 1
+
         upper_bounds.push_back(100);	//100
         filenames.push_back("combined.txt.model");
         types.push_back(NodeDetector::CD_HIK); // second node
         //upper_bounds.push_back(117);	//353
 
-        upper_bounds.push_back(20);	//353
+        upper_bounds.push_back(20);	//353   small model ,like 3M
         //      upper_bounds.push_back(50);	//353
         //         // upper_bounds.push_back(353);	//353
         filenames.push_back("combined2.txt.model");
+#else
+        upper_bounds.push_back(100);	//100
+        filenames.push_back("combined.txt.model");
+        types.push_back(NodeDetector::CD_HIK); // second node
+        //upper_bounds.push_back(117);	//353
 
+        upper_bounds.push_back(256);	//353  big model,like 30M
+        //      upper_bounds.push_back(50);	//353
+        //         // upper_bounds.push_back(353);	//353
+        filenames.push_back("combined2.txt.model");
+#endif
         ds.LoadDetector(types,upper_bounds,filenames);
         // You can adjust these parameters for different speed, accuracy etc
         ds.cascade->nodes[0]->thresh += 0.8;
