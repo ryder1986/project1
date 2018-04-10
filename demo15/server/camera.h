@@ -60,7 +60,20 @@ public:
     {
 
         rst.clear();
-        Rect rct=detect_rect;
+         ;
+        int valid_x=0;
+        int valid_y=0;
+        int valid_w=0;
+        int valid_h=0;
+        if(detect_rect.x>0&&detect_rect.x<mt.cols)
+            valid_x=detect_rect.x;
+        if(detect_rect.y>0&&detect_rect.y<mt.rows)
+            valid_y=detect_rect.y;
+        if((detect_rect.width+detect_rect.x)>0&&(detect_rect.width+detect_rect.x)<mt.cols)
+            valid_w=detect_rect.width;
+        if((detect_rect.height+detect_rect.y)>0&&(detect_rect.height+detect_rect.y)<mt.cols)
+            valid_h=detect_rect.height;
+        Rect rct(valid_x,valid_y,valid_w,valid_h);
         Mat detect_area=mt(rct);//get valid area
         bool  ret=false;
         int mat_w=mt.cols;
