@@ -20,7 +20,7 @@ public:
     }
     virtual  bool real_process( Mat &, std::vector<cv::Rect> &)
     {
-
+        return false;
     }
 
     virtual void init()
