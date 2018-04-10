@@ -3,9 +3,10 @@
 # Project created by QtCreator 2018-04-09T11:23:30
 #
 #-------------------------------------------------
-CONFIG +=c++11
-QT       -= core gui
 
+
+QT       -= core gui
+CONFIG+=c++11
 TARGET = PvdProcessor
 TEMPLATE = lib
 CONFIG += staticlib

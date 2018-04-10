@@ -87,16 +87,16 @@ public:
         lock.lock();
 
         QString str=cfg.toObject()["selected_alg"].toString();
-        if(str=="pvd-c4"){
+        if(str=="pvd_c4"){
             delete  processor;
             cam_cfg.alg=cfg;
-            QJsonValue v=cam_cfg.alg.toObject()["pvd-c4"].toObject()["detect_area"]=cfg.toObject()["pvd-c4"].toObject()["detect_area"];
+            QJsonValue v=cam_cfg.alg.toObject()["pvd_c4"].toObject()["detect_area"]=cfg.toObject()["pvd_c4"].toObject()["detect_area"];
             detect_rect=area_2_rect(v);
             processor=new PvdC4Processor();
-        }else if(str=="pvd-hog"){
+        }else if(str=="pvd_hog"){
             delete  processor;
             cam_cfg.alg=cfg;
-            QJsonValue v=cam_cfg.alg.toObject()["pvd-hog"].toObject()["detect_area"]=cfg.toObject()["pvd-hog"].toObject()["detect_area"];
+            QJsonValue v=cam_cfg.alg.toObject()["pvd_hog"].toObject()["detect_area"]=cfg.toObject()["pvd_hog"].toObject()["detect_area"];
             detect_rect=area_2_rect(v);
             processor=new PvdHogProcessor();
         }else{
@@ -143,12 +143,14 @@ private:
     {
         src=new VideoSource(cam_cfg.url);
         QString str=cam_cfg.alg.toObject()["selected_alg"].toString();
-        if(str=="pd"){
-            QJsonValue v=cam_cfg.alg.toObject()["pd"].toObject()["detect_area"];
+        if(str=="pvd_c4"){
+            QJsonValue v=cam_cfg.alg.toObject()["pvd_c4"].toObject()["detect_area"];
+            detect_rect=area_2_rect(v);
             processor=new PvdC4Processor();
             //   processor=new PdProcessor();
-        }else if(str=="pd-demo"){
-            QJsonValue v=cam_cfg.alg.toObject()["pd-demo"].toObject()["detect_area"] ;
+        }else if(str=="pvd_hog"){
+            QJsonValue v=cam_cfg.alg.toObject()["pvd_hog"].toObject()["detect_area"] ;
+            detect_rect=area_2_rect(v);
             processor=new PvdHogProcessor();
         }
 
