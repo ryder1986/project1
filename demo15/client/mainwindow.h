@@ -113,12 +113,12 @@ private slots:
         o["type"]=6;
         o["cam_index"]=1;
         QJsonObject obj;
-        obj["selected_alg"]="pd";
+        obj["selected_alg"]="pvd_c4";
 
         QJsonObject o1;
         o1["detect_area"]=ps;
 
-        obj["pd"]=o1;
+        obj["pvd_c4"]=o1;
         //   obj
         o["alg"]=obj;
         QJsonDocument doc(o);

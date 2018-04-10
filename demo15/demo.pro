@@ -1,5 +1,4 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    server \
-    PvdProcessor
+    PvdProcessor     server

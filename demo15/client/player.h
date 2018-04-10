@@ -58,14 +58,14 @@ public:
         p.clear();
       QJsonObject ob=  cam_cfg.alg.toObject();
       QString alg_str=ob["selected_alg"].toString();
-      if(alg_str=="pd"){
-           QJsonArray ps= ob["pd"].toObject()["detect_area"].toArray();
+      if(alg_str=="pvd_c4"){
+           QJsonArray ps= ob["pvd_c4"].toObject()["detect_area"].toArray();
            foreach (QJsonValue v, ps) {
                p.append(QPoint(v.toObject()["x"].toInt(),v.toObject()["y"].toInt()));
            }
-      }else if(alg_str=="pd-demo")
+      }else if(alg_str=="pvd_hog")
       {
-          QJsonArray ps= ob["pd-demo"].toObject()["detect_area"].toArray();
+          QJsonArray ps= ob["pvd_hog"].toObject()["detect_area"].toArray();
           foreach (QJsonValue v, ps) {
               p.append(QPoint(v.toObject()["x"].toInt(),v.toObject()["y"].toInt()));
           }

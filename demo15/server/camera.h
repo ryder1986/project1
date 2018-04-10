@@ -231,6 +231,7 @@ protected:
                 //prt(info,"get no frame");
             }
             lock.unlock();
+            QThread::msleep(1);
         }
         QThread::msleep(10);
     }
